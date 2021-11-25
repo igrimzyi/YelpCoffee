@@ -22,7 +22,7 @@ app.get('/', (req,res)=>{
     res.render('home')
 });
 app.get('/makeshop', async (req,res)=>{
-    const shop = new coffeeShop({title: 'Starbucks'});
+    const shop = new coffeeShop({title: 'Starbucks', description: 'Cheap coffee'});
     await shop.save();
     res.send(shop);
 });

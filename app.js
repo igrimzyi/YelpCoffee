@@ -21,11 +21,11 @@ app.set('views' , path.join(__dirname, 'views'))
 app.get('/', (req,res)=>{
     res.render('home')
 });
-app.get('/makeshop', async (req,res)=>{
-    const shop = new coffeeShop({title: 'Starbucks', description: 'Cheap coffee'});
-    await shop.save();
-    res.send(shop);
+app.get('/coffeeShops', async(req,res) => {
+    const coffeeShops = await coffeeShop.find({});
+    res.render('coffeeShops/index', {coffeeShops})
 });
+
 
 app.listen(3000, ()=>{
     console.log("serving on port 3000")

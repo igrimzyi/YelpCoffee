@@ -1,4 +1,4 @@
-const descriptors = [
+module.exports.descriptors = [
     'Stell',
     'Make',
     'Swift',
@@ -16,7 +16,7 @@ const descriptors = [
     'Trade',
 ]
 
-const BrewName = [
+module.exports.brewName = [
     'Brewery',
     'Bean',
     'Mocha',

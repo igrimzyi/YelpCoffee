@@ -25,10 +25,23 @@ app.get('/coffeeShops', async(req,res) => {
     const coffeeShops = await coffeeShop.find({});
     res.render('coffeeShops/index', {coffeeShops})
 });
+app.get('/coffeeShops/new', (req,res)=>{
+    res.render('coffeeShops/new')
+})
+app.post('/coffeeShops', async(req,res)=>{
+    res.send(req.body);
+})
+app.use(express.urlencoded({extended: true}))
 app.get('/coffeeShops/:id', async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)
     res.render('coffeeShops/show', {coffee})
 })
+
+// app.get('/coffeeShops/:id/edit', async(req, res)=>{
+//     const coffee = await coffeeShop.findById(req.params.id)
+//     res.render('coffeeShops/edit', {coffee})
+
+// })
 
 
 app.listen(3000, ()=>{

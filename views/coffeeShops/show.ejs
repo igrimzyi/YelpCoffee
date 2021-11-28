@@ -12,6 +12,11 @@
     <p>
         <a href="/coffeeShops/<%=coffee._id%>/edit">Edit</a>
     </p>
+    <p>
+        <form action="/coffeeShops/<%=coffee._id%>?_method=DELETE" method="POST">
+        <button>Delete</button>
+        </form>
+    </p>
     <footer>
         
         <a href="/coffeeShops">Every Coffee Shop</a>

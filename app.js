@@ -54,6 +54,11 @@ app.put('/coffeeShops/:id', async(req, res) =>{
     const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
     res.redirect(`/coffeeShops/${coffee._id}`)
 })
+app.delete('/coffeeShops/:id', async(req,res)=>{
+    const{id} = req.params; 
+    await coffeeShop.findByIdAndDelete(id); 
+    res.redirect('/coffeeShops')
+})
 
 
 app.listen(3000, ()=>{

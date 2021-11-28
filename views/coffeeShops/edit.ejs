@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Shop</title>
+</head>
+<body>
+    <form action="/coffeeShops/<%=coffee._id%>?_method=PUT" method="POST">
+        <div>
+            <label for="title">Title</label>
+            <input type="text" name="coffeeShop[title]" id="title" value="<%=coffee.title %> ">
+        </div>
+        <div>
+            <label for="location">Location</label>
+            <input type="text" name="coffeeShop[location]" id="location"value="<%=coffee.location %> ">
+        </div>
+        <button>Edit coffeeShop</button>
+    </form>
+    <a href="/coffeeShops/<%=coffee._id%>">Back to Shop</a>
+</body>
+</html>

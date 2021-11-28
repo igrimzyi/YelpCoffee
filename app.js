@@ -1,7 +1,8 @@
 const express = require('express'); 
 const path = require('path');
 const mongoose = require('mongoose');
-const coffeeShop = require('./models/coffee')
+const methodOverride = require('method-override');
+const coffeeShop = require('./models/coffee');
 
 mongoose.connect('mongodb://localhost:27017/coffee-rate', {
     useNewUrlParser: true, 
@@ -18,7 +19,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views' , path.join(__dirname, 'views'))
 
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 
 app.get('/', (req,res)=>{
     res.render('home')
@@ -45,6 +47,12 @@ app.get('/coffeeShops/:id/edit', async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)
     res.render('coffeeShops/edit', {coffee})
 
+})
+
+app.put('/coffeeShops/:id', async(req, res) =>{
+    const {id} = req.params;
+    const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
+    res.redirect(`/coffeeShops/${coffee._id}`)
 })
 
 

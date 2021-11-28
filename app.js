@@ -18,6 +18,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views' , path.join(__dirname, 'views'))
 
+app.use(express.urlencoded({extended: true}))
+
 app.get('/', (req,res)=>{
     res.render('home')
 });
@@ -29,19 +31,21 @@ app.get('/coffeeShops/new', (req,res)=>{
     res.render('coffeeShops/new')
 })
 app.post('/coffeeShops', async(req,res)=>{
-    res.send(req.body);
+    const coffee = new coffeeShop(req.body.coffeeShop);
+    await coffee.save(); 
+    res.redirect(`/coffeeShops/${coffee._id}`)
 })
-app.use(express.urlencoded({extended: true}))
+
 app.get('/coffeeShops/:id', async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)
     res.render('coffeeShops/show', {coffee})
 })
 
-// app.get('/coffeeShops/:id/edit', async(req, res)=>{
-//     const coffee = await coffeeShop.findById(req.params.id)
-//     res.render('coffeeShops/edit', {coffee})
+app.get('/coffeeShops/:id/edit', async(req, res)=>{
+    const coffee = await coffeeShop.findById(req.params.id)
+    res.render('coffeeShops/edit', {coffee})
 
-// })
+})
 
 
 app.listen(3000, ()=>{

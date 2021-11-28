@@ -8,6 +8,10 @@
 </head>
 <body>
     <h1>All Coffee Shops</h1>
+    <div>
+        <a href="/coffeeShops/new">Add a Shop</a>
+    </div>
+
     <ul>
         <%  for (let coffee of coffeeShops){ %> 
         <li><a href="/coffeeShops/<%=coffee._id %>"><%= coffee.title %></a> </li>

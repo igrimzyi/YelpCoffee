@@ -1,6 +1,8 @@
 <% layout('layouts/boilerplate') %> 
     <h1><%= coffee.title %> </h1>
     <h1><%= coffee.location%> </h1>
+    <img src="<%=coffee.image%>" alt="">
+    <p><%= coffee.description %> </p>
     <p>
         <a href="/coffeeShops/<%=coffee._id%>/edit">Edit</a>
     </p>

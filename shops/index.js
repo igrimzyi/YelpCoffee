@@ -20,9 +20,13 @@ const shopDB = async () =>{
     await coffeeShop.deleteMany({});
     for(let i = 0; i<50;i++){
         const random1000= Math.floor(Math.random() * 1000);
+        const price = Math.floor(Math.random()*7) +1;
         const shop = new coffeeShop({
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
-            title: `${sample(descriptors)} ${sample(brewName)}`
+            title: `${sample(descriptors)} ${sample(brewName)}`,
+            image: 'https://source.unsplash.com/collection/3675914',
+            description: 'best coffee shop in the world',
+            price
         })
         await shop.save();
     }

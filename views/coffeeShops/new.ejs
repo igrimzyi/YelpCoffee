@@ -1,13 +1,35 @@
 <% layout('layouts/boilerplate') %> 
-    <form action="/coffeeShops" method="POST">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" name="coffeeShop[title]" id="title">
-        </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" name="coffeeShop[location]" id="location">
-        </div>
-        <button>Add coffeeShop</button>
-    </form>
-    <a href="/coffeeShops">All Shops</a>
+ <div class="row">
+    <h1 class="text-center">New Coffee Shop</h1>
+    <div class="col-6 offset-3">
+        <form action="/coffeeShops" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input class="form-control" type="text" name="coffeeShop[title]" id="title">
+            </div>
+            <div class ="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" name="coffeeShop[location]" id="location" class="form-control">
+            </div>
+            <div class ="mb-3">
+                <label for="image" class="form-label">Image-URL</label>
+                <input type="text" name="coffeeShop[image]" id="image" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Average Price</label>
+                <div class="input-group ">
+                    <span class="input-group-text" id="price-label">$</span>
+                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="coffeeShop[price]">
+                </div>
+            </div>
+            <div class ="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea type="text" name="coffeeShop[description]" id="description" class="form-control"></textarea>
+            </div>
+            <div class="mb-3">
+            <button class="btn btn-success">Add coffeeShop</button>
+            </div>
+        </form>
+        <a href="/coffeeShops">All Shops</a>
+    </div>
+ </div>

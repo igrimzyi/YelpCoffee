@@ -34,10 +34,14 @@ app.get('/coffeeShops', async(req,res) => {
 app.get('/coffeeShops/new', (req,res)=>{
     res.render('coffeeShops/new')
 })
-app.post('/coffeeShops', async(req,res)=>{
+app.post('/coffeeShops', async(req,res,next)=>{
+    try{
     const coffee = new coffeeShop(req.body.coffeeShop);
     await coffee.save(); 
     res.redirect(`/coffeeShops/${coffee._id}`)
+    } catch(e){
+        next(e); 
+    }
 })
 
 app.get('/coffeeShops/:id', async(req, res)=>{
@@ -60,6 +64,9 @@ app.delete('/coffeeShops/:id', async(req,res)=>{
     const{id} = req.params; 
     await coffeeShop.findByIdAndDelete(id); 
     res.redirect('/coffeeShops')
+})
+app.use((err,req,res,next)=>{
+    res.send('error')
 })
 
 

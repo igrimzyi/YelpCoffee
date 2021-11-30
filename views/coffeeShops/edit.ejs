@@ -4,29 +4,29 @@
     <div class="row">
         <h1 class="text-center">Edit Coffee Shop</h1>
         <div class="col-6 offset-3">
-            <form action="/coffeeShops/<%=coffee._id%>?_method=PUT" method="POST">
+            <form action="/coffeeShops/<%=coffee._id%>?_method=PUT" method="POST" class="validated-form"novalidate>
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input class="form-control" type="text" name="coffeeShop[title]" id="title" value="<%=coffee.title %>">
+                    <input class="form-control" type="text" name="coffeeShop[title]" id="title" value="<%=coffee.title %>"required>
                 </div>
                 <div class ="mb-3">
                     <label for="location" class="form-label">Location</label>
-                    <input type="text" name="coffeeShop[location]" id="location" class="form-control" value="<%=coffee.location%> ">
+                    <input type="text" name="coffeeShop[location]" id="location" class="form-control" value="<%=coffee.location%> "required>
                 </div>
                 <div class ="mb-3">
                     <label for="image" class="form-label">Image-URL</label>
-                    <input type="text" name="coffeeShop[image]" id="image" class="form-control" value="<%=coffee.image%> ">
+                    <input type="text" name="coffeeShop[image]" id="image" class="form-control" value="<%=coffee.image%> "required>
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Average Price</label>
                     <div class="input-group ">
                         <span class="input-group-text" id="price-label">$</span>
-                        <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="coffeeShop[price]" value="<%=coffee.price %> ">
+                        <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="coffeeShop[price]" value="<%=coffee.price %> "required>
                     </div>
                 </div>
                 <div class ="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea type="text" name="coffeeShop[description]" id="description" class="form-control"><%= coffee.description %> </textarea>
+                    <textarea type="text" name="coffeeShop[description]" id="description" class="form-control"required><%= coffee.description %> </textarea>
                 </div>
                 <div class="mb-3">
                 <button class="btn btn-success">Update Shop</button>

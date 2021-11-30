@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate= require('ejs-mate'); 
+const catchAsync = require('./utils/catchAsync');
 const methodOverride = require('method-override');
 const coffeeShop = require('./models/coffee');
 
@@ -34,15 +35,12 @@ app.get('/coffeeShops', async(req,res) => {
 app.get('/coffeeShops/new', (req,res)=>{
     res.render('coffeeShops/new')
 })
-app.post('/coffeeShops', async(req,res,next)=>{
-    try{
+app.post('/coffeeShops', catchAsync(async(req,res,next)=>{
+  
     const coffee = new coffeeShop(req.body.coffeeShop);
     await coffee.save(); 
     res.redirect(`/coffeeShops/${coffee._id}`)
-    } catch(e){
-        next(e); 
-    }
-})
+   }))
 
 app.get('/coffeeShops/:id', async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)

@@ -3,8 +3,10 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate= require('ejs-mate'); 
 const catchAsync = require('./utils/catchAsync');
+const expressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const coffeeShop = require('./models/coffee');
+const ExpressError = require('./utils/ExpressError');
 
 mongoose.connect('mongodb://localhost:27017/coffee-rate', {
     useNewUrlParser: true, 
@@ -28,10 +30,10 @@ app.use(methodOverride('_method'));
 app.get('/', (req,res)=>{
     res.render('home')
 });
-app.get('/coffeeShops', async(req,res) => {
+app.get('/coffeeShops', catchAsync(async(req,res) => {
     const coffeeShops = await coffeeShop.find({});
     res.render('coffeeShops/index', {coffeeShops})
-});
+}));
 app.get('/coffeeShops/new', (req,res)=>{
     res.render('coffeeShops/new')
 })
@@ -42,28 +44,33 @@ app.post('/coffeeShops', catchAsync(async(req,res,next)=>{
     res.redirect(`/coffeeShops/${coffee._id}`)
    }))
 
-app.get('/coffeeShops/:id', async(req, res)=>{
+app.get('/coffeeShops/:id', catchAsync(async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)
     res.render('coffeeShops/show', {coffee})
-})
+}));
 
-app.get('/coffeeShops/:id/edit', async(req, res)=>{
+app.get('/coffeeShops/:id/edit', catchAsync(async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)
     res.render('coffeeShops/edit', {coffee})
 
-})
+}));
 
 app.put('/coffeeShops/:id', async(req, res) =>{
     const {id} = req.params;
     const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
     res.redirect(`/coffeeShops/${coffee._id}`)
 })
-app.delete('/coffeeShops/:id', async(req,res)=>{
+app.delete('/coffeeShops/:id', catchAsync(async(req,res)=>{
     const{id} = req.params; 
     await coffeeShop.findByIdAndDelete(id); 
     res.redirect('/coffeeShops')
+}));
+app.all('*',(req,res,next)=>{    
+    next(new ExpressError('Page Not Found', 404))
 })
 app.use((err,req,res,next)=>{
+    const {statusCode = 500, message = 'Something went wrong'} = err;
+    res.status(statusCode).send(message);
     res.send('error')
 })
 

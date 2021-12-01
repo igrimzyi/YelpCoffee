@@ -38,7 +38,7 @@ app.get('/coffeeShops/new', (req,res)=>{
     res.render('coffeeShops/new')
 })
 app.post('/coffeeShops', catchAsync(async(req,res,next)=>{
-  
+    if(!req.body.coffee) throw new ExpressError('Invalid Data', 400);
     const coffee = new coffeeShop(req.body.coffeeShop);
     await coffee.save(); 
     res.redirect(`/coffeeShops/${coffee._id}`)

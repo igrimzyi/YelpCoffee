@@ -3,7 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate= require('ejs-mate'); 
 const catchAsync = require('./utils/catchAsync');
-const Joi = require('joi');
+const {coffeeShopSchema} = require('./schemas.js'); 
 const methodOverride = require('method-override');
 const coffeeShop = require('./models/coffee');
 const ExpressError = require('./utils/ExpressError');
@@ -27,6 +27,16 @@ app.set('views' , path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 
+const validateCoffeeShop = (req,res,next)=>{
+     
+    const {error} =coffeeShopSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el =>el.message).join(',')
+        throw new ExpressError(msg, 400)
+    }else{
+        next();
+    }
+}
 app.get('/', (req,res)=>{
     res.render('home')
 });
@@ -37,20 +47,9 @@ app.get('/coffeeShops', catchAsync(async(req,res) => {
 app.get('/coffeeShops/new', (req,res)=>{
     res.render('coffeeShops/new')
 })
-app.post('/coffeeShops', catchAsync(async(req,res,next)=>{
+
+app.post('/coffeeShops', validateCoffeeShop, catchAsync(async(req,res,next)=>{
     // if(!req.body.coffee) throw new ExpressError('Invalid Data', 400);
-    const coffeeShopSchema = Joi.object({
-        coffeeShop: Joi.object({
-            title: Joi.string().required(), 
-            price: Joi.number().required().min(0),
-        }).required() 
-    }); 
-    const {error} =coffeeShopSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map(el =>el.message).join(',')
-        throw new ExpressError(msg, 400)
-    }
-    console.log(result)
     const coffee = new coffeeShop(req.body.coffeeShop);
     await coffee.save(); 
     res.redirect(`/coffeeShops/${coffee._id}`)
@@ -67,7 +66,7 @@ app.get('/coffeeShops/:id/edit', catchAsync(async(req, res)=>{
 
 }));
 
-app.put('/coffeeShops/:id', async(req, res) =>{
+app.put('/coffeeShops/:id', validateCoffeeShop, async(req, res) =>{
     const {id} = req.params;
     const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
     res.redirect(`/coffeeShops/${coffee._id}`)

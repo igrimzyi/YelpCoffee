@@ -7,6 +7,7 @@ const {coffeeShopSchema} = require('./schemas.js');
 const methodOverride = require('method-override');
 const coffeeShop = require('./models/coffee');
 const ExpressError = require('./utils/ExpressError');
+const Review = require('./models/review')
 
 mongoose.connect('mongodb://localhost:27017/coffee-rate', {
     useNewUrlParser: true, 
@@ -76,6 +77,14 @@ app.delete('/coffeeShops/:id', catchAsync(async(req,res)=>{
     await coffeeShop.findByIdAndDelete(id); 
     res.redirect('/coffeeShops')
 }));
+app.post('/coffeeShops/:id/reviews', catchAsync(async (req,res)=>{
+    const coffee = await coffeeShop.findById(req.params.id);
+    const review = new Review(req.body.review); 
+    coffee.reviews.push(review);
+    await review.save()
+    await coffee.save()
+    res.redirect(`/coffeeShops/${coffee._id}`)
+}))
 app.all('*',(req,res,next)=>{    
     next(new ExpressError('Page Not Found', 404))
 })

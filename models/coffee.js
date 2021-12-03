@@ -6,7 +6,13 @@ const coffeeSchema = new Schema({
     description: String,
     price: Number,
     image: String,
-    location: String
+    location: String, 
+    reviews:[
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
 });
 
 module.exports = mongoose.model('coffee', coffeeSchema)

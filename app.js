@@ -3,11 +3,11 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate= require('ejs-mate'); 
 const catchAsync = require('./utils/catchAsync');
-const {coffeeShopSchema} = require('./schemas.js'); 
+const {coffeeShopSchema, reviewSchema} = require('./schemas.js'); 
 const methodOverride = require('method-override');
 const coffeeShop = require('./models/coffee');
 const ExpressError = require('./utils/ExpressError');
-const Review = require('./models/review')
+const Review = require('./models/review');
 
 mongoose.connect('mongodb://localhost:27017/coffee-rate', {
     useNewUrlParser: true, 
@@ -38,6 +38,15 @@ const validateCoffeeShop = (req,res,next)=>{
         next();
     }
 }
+const validateReview = (req,res,next) =>{
+    const {error} =reviewSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el =>el.message).join(',')
+        throw new ExpressError(msg, 400)
+    }else{
+        next();
+    }
+}
 app.get('/', (req,res)=>{
     res.render('home')
 });
@@ -57,7 +66,7 @@ app.post('/coffeeShops', validateCoffeeShop, catchAsync(async(req,res,next)=>{
    }))
 
 app.get('/coffeeShops/:id', catchAsync(async(req, res)=>{
-    const coffee = await coffeeShop.findById(req.params.id)
+    const coffee = await coffeeShop.findById(req.params.id).populate('reviews');
     res.render('coffeeShops/show', {coffee})
 }));
 
@@ -77,7 +86,7 @@ app.delete('/coffeeShops/:id', catchAsync(async(req,res)=>{
     await coffeeShop.findByIdAndDelete(id); 
     res.redirect('/coffeeShops')
 }));
-app.post('/coffeeShops/:id/reviews', catchAsync(async (req,res)=>{
+app.post('/coffeeShops/:id/reviews', validateReview, catchAsync(async (req,res)=>{
     const coffee = await coffeeShop.findById(req.params.id);
     const review = new Review(req.body.review); 
     coffee.reviews.push(review);

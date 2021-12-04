@@ -94,6 +94,13 @@ app.post('/coffeeShops/:id/reviews', validateReview, catchAsync(async (req,res)=
     await coffee.save()
     res.redirect(`/coffeeShops/${coffee._id}`)
 }))
+app.delete('/coffeeShops/:id/reviews/:reviewId', catchAsync(async(req,res)=>{
+    const {id, reviewId} = req.params;
+    await coffeeShop.findByIdAndUpdate(id, {$pull:{reviews:reviewId}})
+    await Review.findByIdAndDelete(req.params.reviewId);
+    res.redirect(`/coffeeShops/${id}`);
+}
+))
 app.all('*',(req,res,next)=>{    
     next(new ExpressError('Page Not Found', 404))
 })

@@ -9,6 +9,8 @@ const coffeeShop = require('./models/coffee');
 const ExpressError = require('./utils/ExpressError');
 const Review = require('./models/review');
 
+const coffeeShops = require('./routes/coffeeShops');
+
 mongoose.connect('mongodb://localhost:27017/coffee-rate', {
     useNewUrlParser: true, 
     useUnifiedTopology: true
@@ -47,58 +49,25 @@ const validateReview = (req,res,next) =>{
         next();
     }
 }
+
+app.use("/coffeeShops", coffeeShops)
 app.get('/', (req,res)=>{
     res.render('home')
 });
-app.get('/coffeeShops', catchAsync(async(req,res) => {
-    const coffeeShops = await coffeeShop.find({});
-    res.render('coffeeShops/index', {coffeeShops})
-}));
-app.get('/coffeeShops/new', (req,res)=>{
-    res.render('coffeeShops/new')
-})
 
-app.post('/coffeeShops', validateCoffeeShop, catchAsync(async(req,res,next)=>{
-    // if(!req.body.coffee) throw new ExpressError('Invalid Data', 400);
-    const coffee = new coffeeShop(req.body.coffeeShop);
-    await coffee.save(); 
-    res.redirect(`/coffeeShops/${coffee._id}`)
-   }))
-
-app.get('/coffeeShops/:id', catchAsync(async(req, res)=>{
-    const coffee = await coffeeShop.findById(req.params.id).populate('reviews');
-    res.render('coffeeShops/show', {coffee})
-}));
-
-app.get('/coffeeShops/:id/edit', catchAsync(async(req, res)=>{
-    const coffee = await coffeeShop.findById(req.params.id)
-    res.render('coffeeShops/edit', {coffee})
-
-}));
-
-app.put('/coffeeShops/:id', validateCoffeeShop, async(req, res) =>{
-    const {id} = req.params;
-    const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
-    res.redirect(`/coffeeShops/${coffee._id}`)
-})
-app.delete('/coffeeShops/:id', catchAsync(async(req,res)=>{
-    const{id} = req.params; 
-    await coffeeShop.findByIdAndDelete(id); 
-    res.redirect('/coffeeShops')
-}));
 app.post('/coffeeShops/:id/reviews', validateReview, catchAsync(async (req,res)=>{
     const coffee = await coffeeShop.findById(req.params.id);
     const review = new Review(req.body.review); 
     coffee.reviews.push(review);
     await review.save()
     await coffee.save()
-    res.redirect(`/coffeeShops/${coffee._id}`)
+    res.redirect(`/${coffee._id}`)
 }))
 app.delete('/coffeeShops/:id/reviews/:reviewId', catchAsync(async(req,res)=>{
     const {id, reviewId} = req.params;
     await coffeeShop.findByIdAndUpdate(id, {$pull:{reviews:reviewId}})
     await Review.findByIdAndDelete(req.params.reviewId);
-    res.redirect(`/coffeeShops/${id}`);
+    res.redirect(`/${id}`);
 }
 ))
 app.all('*',(req,res,next)=>{    

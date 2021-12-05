@@ -2,14 +2,13 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate= require('ejs-mate'); 
-const catchAsync = require('./utils/catchAsync');
 const {coffeeShopSchema, reviewSchema} = require('./schemas.js'); 
 const methodOverride = require('method-override');
-const coffeeShop = require('./models/coffee');
 const ExpressError = require('./utils/ExpressError');
-const Review = require('./models/review');
+
 
 const coffeeShops = require('./routes/coffeeShops');
+const reviews = require('./routes/reviews')
 
 mongoose.connect('mongodb://localhost:27017/coffee-rate', {
     useNewUrlParser: true, 
@@ -51,25 +50,11 @@ const validateReview = (req,res,next) =>{
 }
 
 app.use("/coffeeShops", coffeeShops)
+app.use("/coffeeShops/:id/reviews", reviews)
 app.get('/', (req,res)=>{
     res.render('home')
 });
 
-app.post('/coffeeShops/:id/reviews', validateReview, catchAsync(async (req,res)=>{
-    const coffee = await coffeeShop.findById(req.params.id);
-    const review = new Review(req.body.review); 
-    coffee.reviews.push(review);
-    await review.save()
-    await coffee.save()
-    res.redirect(`/${coffee._id}`)
-}))
-app.delete('/coffeeShops/:id/reviews/:reviewId', catchAsync(async(req,res)=>{
-    const {id, reviewId} = req.params;
-    await coffeeShop.findByIdAndUpdate(id, {$pull:{reviews:reviewId}})
-    await Review.findByIdAndDelete(req.params.reviewId);
-    res.redirect(`/${id}`);
-}
-))
 app.all('*',(req,res,next)=>{    
     next(new ExpressError('Page Not Found', 404))
 })

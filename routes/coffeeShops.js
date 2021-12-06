@@ -35,11 +35,19 @@ router.post('/', validateCoffeeShop, catchAsync(async(req,res,next)=>{
 
 router.get('/:id', catchAsync(async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id).populate('reviews');
+    if(!coffee){
+        req.flash('error', 'Coffee Shop was not found')
+        return res.redirect('/coffeeShops')
+    }
     res.render('coffeeShops/show', {coffee})
 }));
 
 router.get('/:id/edit', catchAsync(async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)
+    if(!coffee){
+        req.flash('error', 'Coffee Shop was not found')
+        return res.redirect('/coffeeShops')
+    }
     res.render('coffeeShops/edit', {coffee})
 
 }));
@@ -47,7 +55,7 @@ router.get('/:id/edit', catchAsync(async(req, res)=>{
 router.put('/:id', validateCoffeeShop, async(req, res) =>{
     const {id} = req.params;
     const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
-    req.flash('success', 'sucessfully updated campground')
+    req.flash('success', 'successfully updated campground')
     res.redirect(`/coffeeShops/${coffee._id}`)
 })
 router.delete('/:id', catchAsync(async(req,res)=>{

@@ -25,9 +25,11 @@ router.get('/new', (req,res)=>{
 })
 
 router.post('/', validateCoffeeShop, catchAsync(async(req,res,next)=>{
+    
     // if(!req.body.coffee) throw new ExpressError('Invalid Data', 400);
     const coffee = new coffeeShop(req.body.coffeeShop);
-    await coffee.save(); 
+    await coffee.save();
+    req.flash('success', 'Successfully made a Coffee Shop') 
     res.redirect(`/coffeeShops/${coffee._id}`)
    }))
 

@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate= require('ejs-mate');
-const session = require('express-session') 
+const session = require('express-session');
+const flash = require('connect-flash')
 const {coffeeShopSchema, reviewSchema} = require('./schemas.js'); 
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/ExpressError');
@@ -42,6 +43,7 @@ const sessionConfig = {
     }
 }
 app.use(session(sessionConfig))
+app.use(flash())
 
 const validateCoffeeShop = (req,res,next)=>{
      
@@ -62,6 +64,11 @@ const validateReview = (req,res,next) =>{
         next();
     }
 }
+app.use((req,res,next)=>{
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error')
+    next();
+})
 
 app.use("/coffeeShops", coffeeShops)
 app.use("/coffeeShops/:id/reviews", reviews)

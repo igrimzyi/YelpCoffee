@@ -47,11 +47,13 @@ router.get('/:id/edit', catchAsync(async(req, res)=>{
 router.put('/:id', validateCoffeeShop, async(req, res) =>{
     const {id} = req.params;
     const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
+    req.flash('success', 'sucessfully updated campground')
     res.redirect(`/coffeeShops/${coffee._id}`)
 })
 router.delete('/:id', catchAsync(async(req,res)=>{
     const{id} = req.params; 
     await coffeeShop.findByIdAndDelete(id); 
+    req.flash('success', 'Successfully Deleted')
     res.redirect('/coffeeShops')
 }));
 

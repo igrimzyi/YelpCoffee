@@ -16,7 +16,8 @@
     "express-session": "^1.17.2",
     "joi": "^17.4.3",
     "method-override": "^3.0.0",
-    "mongoose": "^6.0.13"
+    "mongoose": "^6.0.13",
+    "passport": "^0.5.0"
   },
   "description": ""
 }

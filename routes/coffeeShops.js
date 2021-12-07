@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const coffeeShop = require('../models/coffee');
 const {coffeeShopSchema} = require('../schemas.js'); 
+const {isLoggedIn} = require('../middleware')
 
 const validateCoffeeShop = (req,res,next)=>{
      
@@ -20,11 +21,12 @@ router.get('/', catchAsync(async(req,res) => {
     const coffeeShops = await coffeeShop.find({});
     res.render('coffeeShops/index', {coffeeShops})
 }));
-router.get('/new', (req,res)=>{
+router.get('/new', isLoggedIn, (req,res)=>{
+    
     res.render('coffeeShops/new')
 })
 
-router.post('/', validateCoffeeShop, catchAsync(async(req,res,next)=>{
+router.post('/', isLoggedIn, validateCoffeeShop, catchAsync(async(req,res,next)=>{
     
     // if(!req.body.coffee) throw new ExpressError('Invalid Data', 400);
     const coffee = new coffeeShop(req.body.coffeeShop);
@@ -42,7 +44,7 @@ router.get('/:id', catchAsync(async(req, res)=>{
     res.render('coffeeShops/show', {coffee})
 }));
 
-router.get('/:id/edit', catchAsync(async(req, res)=>{
+router.get('/:id/edit', isLoggedIn, catchAsync(async(req, res)=>{
     const coffee = await coffeeShop.findById(req.params.id)
     if(!coffee){
         req.flash('error', 'Coffee Shop was not found')
@@ -52,13 +54,13 @@ router.get('/:id/edit', catchAsync(async(req, res)=>{
 
 }));
 
-router.put('/:id', validateCoffeeShop, async(req, res) =>{
+router.put('/:id', isLoggedIn, validateCoffeeShop, async(req, res) =>{
     const {id} = req.params;
     const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
     req.flash('success', 'successfully updated campground')
     res.redirect(`/coffeeShops/${coffee._id}`)
 })
-router.delete('/:id', catchAsync(async(req,res)=>{
+router.delete('/:id',isLoggedIn, catchAsync(async(req,res)=>{
     const{id} = req.params; 
     await coffeeShop.findByIdAndDelete(id); 
     req.flash('success', 'Successfully Deleted')

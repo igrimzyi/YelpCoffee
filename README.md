@@ -1,2 +1,2 @@
-# YelpCamp
+# YelpCoffee
  First Fullstack Project

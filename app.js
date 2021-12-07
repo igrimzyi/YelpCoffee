@@ -7,6 +7,10 @@ const flash = require('connect-flash')
 const {coffeeShopSchema, reviewSchema} = require('./schemas.js'); 
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/ExpressError');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user')
+
 
 
 const coffeeShops = require('./routes/coffeeShops');
@@ -45,6 +49,13 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 const validateCoffeeShop = (req,res,next)=>{
      
     const {error} =coffeeShopSchema.validate(req.body);
@@ -72,6 +83,8 @@ app.use((req,res,next)=>{
 
 app.use("/coffeeShops", coffeeShops)
 app.use("/coffeeShops/:id/reviews", reviews)
+
+
 app.get('/', (req,res)=>{
     res.render('home')
 });

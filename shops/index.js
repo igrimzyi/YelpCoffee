@@ -22,6 +22,7 @@ const shopDB = async () =>{
         const random1000= Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random()*7) +1;
         const shop = new coffeeShop({
+            author: '61afedf5503989604e41b940',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(brewName)}`,
             image: 'https://source.unsplash.com/collection/3675914',

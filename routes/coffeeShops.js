@@ -28,15 +28,15 @@ router.get('/new', isLoggedIn, (req,res)=>{
 
 router.post('/', isLoggedIn, validateCoffeeShop, catchAsync(async(req,res,next)=>{
     
-    // if(!req.body.coffee) throw new ExpressError('Invalid Data', 400);
     const coffee = new coffeeShop(req.body.coffeeShop);
+    coffee.author = req.user._id;
     await coffee.save();
     req.flash('success', 'Successfully made a Coffee Shop') 
     res.redirect(`/coffeeShops/${coffee._id}`)
    }))
 
 router.get('/:id', catchAsync(async(req, res)=>{
-    const coffee = await coffeeShop.findById(req.params.id).populate('reviews');
+    const coffee = await coffeeShop.findById(req.params.id).populate('reviews').populate('author');
     if(!coffee){
         req.flash('error', 'Coffee Shop was not found')
         return res.redirect('/coffeeShops')

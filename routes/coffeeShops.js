@@ -1,21 +1,10 @@
 const express = require('express');
 const  router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
 const coffeeShop = require('../models/coffee');
-const {coffeeShopSchema} = require('../schemas.js'); 
-const {isLoggedIn} = require('../middleware')
 
-const validateCoffeeShop = (req,res,next)=>{
-     
-    const {error} =coffeeShopSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map(el =>el.message).join(',')
-        throw new ExpressError(msg, 400)
-    }else{
-        next();
-    }
-}
+const {isLoggedIn, isAuthor, validateCoffeeShop} = require('../middleware')
+
 
 router.get('/', catchAsync(async(req,res) => {
     const coffeeShops = await coffeeShop.find({});
@@ -44,7 +33,8 @@ router.get('/:id', catchAsync(async(req, res)=>{
     res.render('coffeeShops/show', {coffee})
 }));
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async(req, res)=>{
+router.get('/:id/edit', isLoggedIn,isAuthor, catchAsync(async(req, res)=>{
+    const {id} = req.params;
     const coffee = await coffeeShop.findById(req.params.id)
     if(!coffee){
         req.flash('error', 'Coffee Shop was not found')
@@ -54,13 +44,13 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async(req, res)=>{
 
 }));
 
-router.put('/:id', isLoggedIn, validateCoffeeShop, async(req, res) =>{
+router.put('/:id', isLoggedIn, isAuthor, validateCoffeeShop, async(req, res) =>{
     const {id} = req.params;
-    const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
+    const Coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
     req.flash('success', 'successfully updated campground')
     res.redirect(`/coffeeShops/${coffee._id}`)
 })
-router.delete('/:id',isLoggedIn, catchAsync(async(req,res)=>{
+router.delete('/:id',isLoggedIn, isAuthor, catchAsync(async(req,res)=>{
     const{id} = req.params; 
     await coffeeShop.findByIdAndDelete(id); 
     req.flash('success', 'Successfully Deleted')

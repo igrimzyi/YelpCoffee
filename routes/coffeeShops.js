@@ -25,7 +25,7 @@ router.post('/', isLoggedIn, validateCoffeeShop, catchAsync(async(req,res,next)=
    }))
 
 router.get('/:id', catchAsync(async(req, res)=>{
-    const coffee = await coffeeShop.findById(req.params.id).populate('reviews').populate('author');
+    const coffee = await coffeeShop.findById(req.params.id).populate({path:'reviews', populate:{path:'author'}}).populate('author');
     if(!coffee){
         req.flash('error', 'Coffee Shop was not found')
         return res.redirect('/coffeeShops')

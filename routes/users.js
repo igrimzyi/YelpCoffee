@@ -23,7 +23,6 @@ router.post('/register', catchAsync(async(req,res, next)=>{
         req.flash('error', e.message)
         res.redirect('register');
     }
-}))
 
 router.get('/login' , (req,res)=>{
     res.render('users/login');

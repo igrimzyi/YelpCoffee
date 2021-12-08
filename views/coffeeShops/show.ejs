@@ -13,17 +13,19 @@
                 <li class="list-group-item">Submitted By: <%= coffee.author.username %> </li>
                 <li class="list-group-item">Average Coffee Price: $<%= coffee.price%></li>
             </ul>
+            <% if(currentUser && coffee.author.equals(currentUser._id)) {%> 
             <div class="card-body">
                 <a class="card-link btn btn-info"href="/coffeeShops/<%=coffee._id%>/edit">Edit</a>
                 <form class="d-inline"action="/coffeeShops/<%=coffee._id%>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">Delete</button>
                     </form>
             </div>
-           
+            <% } %> 
       </div>
     
     </div>
     <div class="col-6">
+        <% if(currentUser){ %> 
         <h2>Leave a Review</h2>
         <form action="/coffeeShops/<%=coffee._id%>/reviews " method="POST" class="mb-3 validated-form" novalidate>
             <div class="mb-3">
@@ -36,9 +38,10 @@
             </div>
             <button class="btn btn-success">Submit</button>
         </form>
+        <% } %> 
         <%for(let review of coffee.reviews){%>
       <div class="card mb-3">
-          <% if(currentUser && coffee.author.equals(currentUser._id)) {%> 
+        
         <div class="card-body">
            <h5 class="card-title">Rating:<%= review.rating%> </h5>
            <p card-text><%= review.body %> </p>
@@ -46,7 +49,7 @@
             <button class="btn btn-sm btn-danger">delete</button>
             </form>
         </div>
-        <% } %> 
+        
       </div>
         <% } %> 
     </div>

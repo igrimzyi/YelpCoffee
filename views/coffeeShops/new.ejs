@@ -2,7 +2,7 @@
  <div class="row">
     <h1 class="text-center">New Coffee Shop</h1>
     <div class="col-6 offset-3">
-        <form action="/coffeeShops" method="POST" class="validated-form" novalidate>
+        <form action="/coffeeShops" method="POST" class="validated-form" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input class="form-control" type="text" name="coffeeShop[title]" id="title" required>
@@ -11,10 +11,12 @@
                 <label for="location" class="form-label">Location</label>
                 <input type="text" name="coffeeShop[location]" id="location" class="form-control" required>
             </div>
-            <div class ="mb-3">
+            <input type="file" name="image" id="" multiple>
+
+            <!-- <div class ="mb-3">
                 <label for="image" class="form-label">Image-URL</label>
                 <input type="text" name="coffeeShop[image]" id="image" class="form-control" required>
-            </div>
+            </div> -->
             <div class="mb-3">
                 <label for="price" class="form-label">Average Price</label>
                 <div class="input-group ">

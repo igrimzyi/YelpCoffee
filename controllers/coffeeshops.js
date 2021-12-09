@@ -10,6 +10,7 @@ module.exports.renderNewForm = (req,res)=>{
 
 module.exports.createShop = async(req,res,next)=>{
     const coffee = new coffeeShop(req.body.coffeeShop);
+    coffee.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     coffee.author = req.user._id;
     await coffee.save();
     req.flash('success', 'Successfully made a Coffee Shop') 
@@ -36,6 +37,9 @@ module.exports.renderEditForm = async(req, res)=>{
 module.exports.updateShop = async(req, res) =>{
     const {id} = req.params;
     const coffee = await coffeeShop.findByIdAndUpdate(id,{...req.body.coffeeShop})
+    const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
+    coffee.images.push(...imgs);
+    await coffee.save();
     req.flash('success', 'successfully updated campground')
     res.redirect(`/coffeeShops/${coffee._id}`)
 }

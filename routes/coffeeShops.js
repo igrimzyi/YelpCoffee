@@ -6,19 +6,22 @@ const coffeeShop = require('../models/coffee');
 
 const {isLoggedIn, isAuthor, validateCoffeeShop} = require('../middleware')
 
+router.route('/')
+    .get(catchAsync(coffeeshops.index))
+    .post(isLoggedIn, validateCoffeeShop, catchAsync(coffeeshops.createShop))
 
-router.get('/', catchAsync(coffeeshops.index));
 
 router.get('/new', isLoggedIn, coffeeshops.renderNewForm)
 
-router.post('/', isLoggedIn, validateCoffeeShop, catchAsync(coffeeshops.createShop))
-
-router.get('/:id', catchAsync(coffeeshops.showShop));
+router.route('/:id')
+    .get( catchAsync(coffeeshops.showShop))
+    .put(isLoggedIn, isAuthor, validateCoffeeShop, catchAsync(coffeeshops.updateShop))
+    .delete(isLoggedIn, isAuthor, catchAsync(coffeeshops.deleteShop));
 
 router.get('/:id/edit', isLoggedIn,isAuthor, catchAsync(coffeeshops.renderEditForm));
 
-router.put('/:id', isLoggedIn, isAuthor, validateCoffeeShop, catchAsync(coffeeshops.updateShop))
 
-router.delete('/:id',isLoggedIn, isAuthor, catchAsync(coffeeshops.deleteShop));
+
+
 
 module.exports = router;

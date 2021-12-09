@@ -1,4 +1,5 @@
 const coffeeShop = require('../models/coffee');
+const {cloudinary} = require('../cloudinary');
 
 module.exports.index = async(req,res) => {
     const coffeeShops = await coffeeShop.find({});
@@ -40,6 +41,12 @@ module.exports.updateShop = async(req, res) =>{
     const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
     coffee.images.push(...imgs);
     await coffee.save();
+    if(req.body.deleteImages){
+        for(let filename of req.body.deleteImages){
+           await cloudinary.uploader.destroy(filename);
+        }
+    await coffee.updateOne({$pull: {images:{filename: {$in: req.body.deleteImages}}}})
+   }
     req.flash('success', 'successfully updated campground')
     res.redirect(`/coffeeShops/${coffee._id}`)
 }

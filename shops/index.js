@@ -25,7 +25,15 @@ const shopDB = async () =>{
             author: '61afedf5503989604e41b940',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(brewName)}`,
-            image: 'https://source.unsplash.com/collection/3675914',
+            images: [{
+                filename: "Brewlicious/ipzzifgp3czmskflh0cm",  
+                url : "https://res.cloudinary.com/duv85yhgr/image/upload/v1639085260/Brewlicious/urlx2owc5qeaf17ynx9m.jpg"
+            },
+            {
+            url : "https://res.cloudinary.com/duv85yhgr/image/upload/v1639086518/Brewlicious/b6vzbnmsm7jxtafsequl.jpg", 
+            filename: "Brewlicious/b6vzbnmsm7jxtafsequl"
+            }
+            ],
             description: 'best coffee shop in the world',
             price
         })

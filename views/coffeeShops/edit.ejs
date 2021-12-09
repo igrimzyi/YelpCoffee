@@ -4,7 +4,7 @@
     <div class="row">
         <h1 class="text-center">Edit Coffee Shop</h1>
         <div class="col-6 offset-3">
-            <form action="/coffeeShops/<%=coffee._id%>?_method=PUT" method="POST" class="validated-form"novalidate>
+            <form action="/coffeeShops/<%=coffee._id%>?_method=PUT" method="POST" class="validated-form"novalidate enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input class="form-control" type="text" name="coffeeShop[title]" id="title" value="<%=coffee.title %>"required>
@@ -14,8 +14,8 @@
                     <input type="text" name="coffeeShop[location]" id="location" class="form-control" value="<%=coffee.location%> "required>
                 </div>
                 <div class ="mb-3">
-                    <label for="image" class="form-label">Image-URL</label>
-                    <input type="text" name="coffeeShop[image]" id="image" class="form-control" value="<%=coffee.image%> "required>
+                    <label for="image" class="form-label">Add Images</label>
+                    <input type="file" name="image" id="image" required multiple>
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Average Price</label>

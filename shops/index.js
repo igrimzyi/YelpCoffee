@@ -27,7 +27,10 @@ const shopDB = async () =>{
             title: `${sample(descriptors)} ${sample(brewName)}`,
             geometry:{
             type: 'Point',
-            coordinates: [-113.1331, 47.0202]
+            coordinates: [
+            cities[random1000].longitude,
+            cities[random1000].latitude
+            ]
 
             },
             images: [{

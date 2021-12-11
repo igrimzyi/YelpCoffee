@@ -25,6 +25,11 @@ const shopDB = async () =>{
             author: '61afedf5503989604e41b940',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(brewName)}`,
+            geometry:{
+            type: 'Point',
+            coordinates: [-113.1331, 47.0202]
+
+            },
             images: [{
                 filename: "Brewlicious/ipzzifgp3czmskflh0cm",  
                 url : "https://res.cloudinary.com/duv85yhgr/image/upload/v1639085260/Brewlicious/urlx2owc5qeaf17ynx9m.jpg"

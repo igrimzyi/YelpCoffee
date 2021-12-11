@@ -6,10 +6,14 @@
 
     
         <%  for (let coffee of coffeeShops){ %> 
-        <div class="card">
+        <div class="card" mb-3>
             <div class="row">
                 <div class="col-md-4">
+                    <% if(coffee.images.length) {%> 
                     <img class="img-fluid" src="<%=coffee.images[0].url%> " alt="">
+                    <% }else {%>
+                        
+                    <% } %> 
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">

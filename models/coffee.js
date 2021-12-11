@@ -11,6 +11,8 @@ ImageSchema.virtual('thumbnail').get(function(){
     return this.url.replace('/upload','/upload/w_200')
 })
 
+const opts = {toJSON: {virtuals:true}};
+
 
 const coffeeSchema = new Schema({
     title: String,
@@ -39,7 +41,13 @@ const coffeeSchema = new Schema({
             ref: 'Review'
         }
     ]
-});
+} , opts);
+
+coffeeSchema.virtual('properties.popUpMarkup').get(function(){
+    return(`<a href="/coffeeShops/${this._id}">${this.title}`)
+})
+
+
 coffeeSchema.post('findOneAndDelete', async function(doc){
     if(doc){
         await Review.deleteMany({

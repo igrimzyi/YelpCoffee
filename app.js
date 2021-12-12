@@ -15,15 +15,18 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize')
-const helmet = require('helmet')
+const MongoDBStore = require('connect-mongo')(session);
+const dbUrl = process.env.DB_URL;
+const secret = process.env.SECRET;
 
 
 
 const userRoutes = require('./routes/users')
 const coffeeShops = require('./routes/coffeeShops');
-const reviews = require('./routes/reviews')
+const reviews = require('./routes/reviews');
 
-mongoose.connect('mongodb://localhost:27017/coffee-rate', {
+
+mongoose.connect(dbUrl, {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
 })
@@ -43,9 +46,20 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname , 'public')))
 
+const store = new MongoDBStore({
+    url: dbUrl,
+    secret: secret,
+    touchAfter: 24 * 60 * 60
+})
+
+store.on('error', function(e){
+console.log('session store error')
+})
+
 
 const sessionConfig = {
-    secret: 'thisshouldbeabettersecret',
+    store,
+    secret: secret,
     resave: false,
     saveUninitialized: true,
     cookie:{

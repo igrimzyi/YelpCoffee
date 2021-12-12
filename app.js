@@ -13,7 +13,10 @@ const methodOverride = require('method-override');
 const ExpressError = require('./utils/ExpressError');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const User = require('./models/user')
+const User = require('./models/user');
+const mongoSanitize = require('express-mongo-sanitize')
+const helmet = require('helmet')
+
 
 
 const userRoutes = require('./routes/users')
@@ -39,6 +42,7 @@ app.set('views' , path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname , 'public')))
+
 
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret',

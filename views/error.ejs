@@ -3,7 +3,9 @@
     <div class="col-7 offset-2">
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading row"><%=err.message%></h4>
+            <%if(process.env.NODE_ENV !== 'production') {  %> 
             <pre style="white-space: pre-wrap; word-break: break-word;"><%= err.stack %></pre>
+            <% } %> 
             
           </div>
     </div>

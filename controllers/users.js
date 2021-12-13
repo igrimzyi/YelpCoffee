@@ -14,8 +14,7 @@ module.exports.register = async(req,res, next)=>{
         req.flash('success', 'Successfully Registered and Logged in')
         res.redirect('/coffeeShops')
     })
-    req.flash('success' ,'Welcome to Brewlicious!')
-    req.redirect('/coffeeShops');
+    
     } catch(e){
         req.flash('error', e.message)
         res.redirect('register');
@@ -29,7 +28,7 @@ module.exports.login = (req,res) =>{
     req.flash('success', 'Welcome Back!');
     const redirectUrl = req.session.returnTo || '/coffeeShops'
     delete req.session.returnTo;
-    res.redirect('/coffeeShops')
+    res.redirect(redirectUrl)
 };
 module.exports.logout = (req,res)=>{
     req.logout();

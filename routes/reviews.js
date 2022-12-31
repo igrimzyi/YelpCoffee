@@ -8,7 +8,7 @@ const {validateReview, isLoggedIn, isReviewAuthor} = require('../middleware')
 const catchAsync = require('../utils/catchAsync');
 
 
-
+// posting reviews to routes
 
 router.post('/', validateReview, isLoggedIn, catchAsync(reviews.createReview));
 
